@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>"Рога и копыта" - лучший магазин рогов и копыт!</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header class="header">
+            <a href="/" class="logo_link"><img src="/static/img/logo.png" alt="Рога и копыта" class="logo"></a>
+            <ul class="menu_list">
+                <li><a class="menu_list_item" href="/">Главная</a></li>
+                <li><a class="menu_list_item" href="/products/">Каталог</a></li>
+                <li><a class="menu_list_item" href="/contacts/">Контакты</a></li>
+            </ul>
+        </header>
+
+
+        <main>
+            <div class="feedback_wrapper">
+                <h3>Напишите нам</h3>
+                <form action="dummy.html">
+                    <ul class="feedback_list">
+                        <li>Ваше имя:</li>
+                        <li><input class="feedback_input_text" type="text" name="name" size="30" placeholder="Иван Петров"><span></span></li>
+                        <li>Телефон:</li>
+                        <li><input class="feedback_input_text" type="tel" name="phone" size="30" placeholder="+7-999-123-45-67" pattern="\+?[\d*-?\s?\(?\)?]*"><span class="feedback_input_incorrect"></span></li>
+                        <li>E-mail:</li>
+                        <li><input class="feedback_input_text feedback_input_email" type="email" name="email" size="30" placeholder="ivanpetrov@mail.ru"><span class="feedback_input_incorrect"></span></li>
+                        <li>Тема обращения:</li>
+                        <li><input class="feedback_input_text" type="text" name="theme" size="30" placeholder="Привозите ли вы рога под заказ?"></li>
+                        <li>Ваше сообщение:</li>
+                        <li><textarea class="feedback_textarea" name="message" id="message" cols="30" rows="10"></textarea><span></span></li>
+                        <li>Оцените наш магазин:</li>
+                        <li>1<input name="mark" type="range" min="1" max="5" disabled="disabled" value="5">5</li>
+                        <li>
+                            <button class="feedback_button feedback_button_reset" type="reset">Очистить форму</button>
+                            <button class="feedback_button feedback_button_submit" type="submit">Отправить</button>
+                        </li>
+                    </ul>
+                </form>
+
+                <h4>Адрес:</h4>
+                <ul class="feedback_adress_list">
+                    <li>Телефон: +7-495-123-45-67</li>
+                    <li>Адрес: Московская область, г. Подольск, проспект Ленина, 21</li>
+                    <li>e-mail: <a href="mailto:shop@hornsandhoofs.ru">shop@hornsandhoofs.ru</a></li>
+                    <li>Часы работы: с 9 до 18 по будням</li>
+                </ul>
+            </div>
+            <script async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A9126e850279425f5c73bc18abee3edf84d60897f5c83895bdcb0221fe6e9fd58&amp;height=374&amp;lang=ru_RU&amp;scroll=true"></script>
+        </main>
+
+        <footer class="footer">
+            <p class="footer_text">"Рога и копыта"&copy; 2019. Все права защищены.</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

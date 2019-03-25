@@ -1,0 +1,330 @@
+* {
+    transition: .1s linear;
+}
+
+ymaps {
+    transition: none;
+}
+
+body {
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+}
+
+.container {
+    width: 950px;
+    margin: 0px auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/*общие классы (для объектов только с одним стилевым изменением, микс)*/
+
+.ta_center {
+    text-align: center;
+}
+
+.lst_none {
+    list-style-type: none;
+}
+
+.mt0 {
+    margin-top: 0;
+}
+
+.cb {
+    clear: both;
+}
+
+/*верхнее меню сайта*/
+
+.header {
+    background: url(images/header_bg2.jpg);
+    background-size: cover;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    border-bottom: 1px solid #777;
+    height: 51px;
+}
+
+.logo_link {
+    display: block;
+    width: 60px;
+}
+
+.logo {
+    height: 51px;
+}
+
+.menu_list {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+}
+
+.menu_list_item {
+    color: #121;
+    font-size: 1.1em;
+    padding-left: 15px;
+    display: block;
+    padding: 15px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.menu_list_item:hover {
+    background-color: orange;
+    color: #fff;
+}
+
+
+
+/*Заголовок*/
+
+.header_heading {
+    text-align: center;
+}
+
+.header_first_hr {
+    margin-top: 0;
+    clear: both;
+}
+
+
+/*Футер*/
+
+.footer {
+    border-top: 1px solid #777;
+    height: 36px;
+    background-color: #ddd;
+    padding-bottom: 15px;
+    margin-top: 10px;
+}
+
+.footer_text {
+    color: #777;
+    text-align: right;
+    padding-right: 30px;
+}
+
+
+/*главная страница*/
+
+.index_welcome {
+    text-align: center;
+}
+
+.index_splash {
+    text-align: center;
+    margin-bottom: -11px;
+}
+
+.index_main_image {
+    width: 100%;
+}
+
+
+
+/*каталог*/
+
+.products_list_wrapper {
+    flex: 1;
+}
+
+
+.products_list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex: 1;
+    width: 100%;
+    padding-left: 10%;
+}
+
+.product_list_item {
+    text-align: center;
+    margin: 10px 10% 30px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 20%;
+    box-sizing: border-box;
+    display: block;
+}
+
+.product_list_item:hover {
+    background-color: #f0ba56;
+}
+
+.product_list_item_img {
+    height: 100px;
+}
+
+/*Описание на странице товара*/
+
+
+
+.product_description {
+    color: black;
+    font-size: 18px;
+    font-weight: 400;
+    background-color: #eaeaea;
+    padding: 2px 15px;
+}
+
+.product_short_description_wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.product_short_description {
+    color: #707070;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 16px;
+}
+
+.product_full_description {
+    color: #484343;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+}
+
+.product_full_description:first-letter {
+    color: orange;
+    font-size: 1.2em;
+    font-family: sans-serif;
+    font-style: italic;
+}
+
+.product_specs {
+    list-style-type: none;
+}
+
+.product_specs_item {
+    background: url('images/bullet16.png') no-repeat left center;
+    padding: 3px 0 3px 25px;
+    font-family: monospace;
+    font-weight: 700;
+}
+
+.product_img_preview {
+    border: 4px solid orange;
+    border-radius: 7px;
+    padding: 5px;
+    margin: auto 40px 20px 25px;
+    float: left;
+}
+
+.product_img_preview:hover {
+    border-color: transparent;
+}
+
+.product_button_buy {
+    border-radius: 5px;
+    padding: 5px 20px;
+    border-color: #ccc;
+    font-weight: 700;
+    background-color: lightgreen;
+    outline: none;
+    bottom: 0;
+    margin-top: 15px;
+}
+
+.product_button_buy:hover {
+    background-color: #0f0;
+    cursor: pointer;
+}
+
+.product_button_buy:active {
+    background-color: orange;
+    color: white;
+}
+
+.product_specs_table {
+    border: 1px solid darkgray;
+    border-collapse: collapse;
+}
+
+.product_specs_table tr:first-of-type td {
+    /* можно было решить через назначение класса первой строке */
+    height: 30px;
+    text-align: center;
+    background-color: #ccc;
+}
+
+.product_specs_table td {
+    border: 1px solid darkgray;
+    padding: 5px;
+}
+
+
+/*Форма обратной связи на странице "Контакты"*/
+.feedback_wrapper {
+    padding: 0 20px;
+}
+
+.feedback_list,
+.feedback_adress_list {
+    list-style-type: none;
+}
+
+.feedback_input_text,
+.feedback_textarea {
+    width: 300px;
+    color: #229;
+    font-size: 1.1em;
+    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid darkgray;
+    outline: none;
+    text-transform: capitalize;
+    margin: 3px 0 10px;
+}
+
+.feedback_input_text {
+    height: 20px;
+}
+
+.feedback_input_text:invalid {
+    background-color: lightcoral;
+    color: black;
+}
+
+.feedback_input_text:invalid + .feedback_input_incorrect:after {
+    content: " \2718  поле заполнено неверно!";
+    color: red;
+}
+
+.feedback_input_email:focus {
+    background-color: #777;
+    color: orange;
+}
+
+
+
+.feedback_button {
+    width: 152px;
+    height: 30px;
+    margin-top: 15px;
+    font-weight: 700;
+    color: #333;
+}
+
+.feedback_button_reset {
+    background-color: #F77;
+}
+
+.feedback_button_submit {
+    background-color: #7f7;
+}

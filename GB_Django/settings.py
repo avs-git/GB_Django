@@ -26,7 +26,7 @@ SECRET_KEY = 'ltd+eg_f1x&l*2=vzuhjof1%$1sqxqtk0cz@3bxybck@5_&1r*'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+# lesson 1
 
 # Application definition
 

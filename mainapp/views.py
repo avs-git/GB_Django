@@ -1,3 +1,5 @@
+# lesson 1
+
 from django.shortcuts import render
 
 

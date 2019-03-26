@@ -48,7 +48,7 @@ main {
 /*верхнее меню сайта*/
 
 .header {
-    background: url(images/header_bg2.jpg);
+    background: url(/static/img/header_bg2.jpg);
     background-size: cover;
     display: flex;
     justify-content: space-between;
@@ -214,7 +214,7 @@ main {
 }
 
 .product_specs_item {
-    background: url('images/bullet16.png') no-repeat left center;
+    background: url('/static/img/bullet16.png') no-repeat left center;
     padding: 3px 0 3px 25px;
     font-family: monospace;
     font-weight: 700;

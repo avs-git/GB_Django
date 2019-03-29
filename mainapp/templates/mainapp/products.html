@@ -1,80 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'mainapp/base.html' %}
+{% load staticfiles %}
+{% block title %}
+    {{ title }}
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Рога большие - в лучшем магазин рогов и копыт!</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
 
-<body>
 
-    <div class="container">
-        <header class="header">
-            <a href="/" class="logo_link"><img src="/static/img/logo.png" alt="Рога и копыта" class="logo"></a>
-            <ul class="menu_list">
-                <li><a class="menu_list_item" href="/">Главная</a></li>
-                <li><a class="menu_list_item" href="/products/">Каталог</a></li>
-                <li><a class="menu_list_item" href="/contacts/">Контакты</a></li>
-            </ul>
-        </header>
+{% block content %}
+    <h2 class="header_heading">Рога большие</h2>
+    <hr>
+    <div class="product_wrapper">
+        <a target="_blank" href="{% static 'img/horn1.jpg' %}"><img class="product_img_preview"
+                                                             src="{% static 'img/preview/horn1.jpg' %}" alt="Рога большие"
+                                                             title="Увеличить изображение"></a>
+        <div class="product_short_description_wrapper">
+            <h3 class="product_description mt0">Описание товара</h3>
+            <p class="product_short_description">Отличные большие экологически чистые без ГМО рога.</p>
+            <button class="product_button_buy">Купить в один клик</button>
+        </div>
+        <h3 class="product_description cb">Характеристики товара</h3>
+        <ul class="product_specs">
+            <li class="product_specs_item">Что это: рога</li>
+            <li class="product_specs_item">Цвет: коричневый</li>
+            <li class="product_specs_item">Размер(см): 50х30х20</li>
+            <li class="product_specs_item">Страна происхождения: Россия</li>
+            <li class="product_specs_item">Год изготовления: 1975</li>
+            <li class="product_specs_item"><b>Цена: 65 000руб</b></li>
+        </ul>
+        <table class="product_specs_table">
+            <tr>
+                <td colspan="5">Сводная таблица характеристик</td>
+            </tr>
+            <tr>
+                <td rowspan="3">размеры</td>
+                <td>ширина</td>
+                <td>50см</td>
+                <td>вес</td>
+                <td>3кг</td>
+            </tr>
+            <tr>
+                <td>высота</td>
+                <td>45см</td>
+                <td>размер</td>
+                <td>48</td>
+            </tr>
+            <tr>
+                <td>длина</td>
+                <td>35см</td>
+                <td>плотность</td>
+                <td>2700кг/м<sup>3</sup></td>
+            </tr>
+        </table>
 
-        <main>
-            <h2 class="header_heading">Рога большие</h2>
-            <hr>
-            <div class="product_wrapper">
-                <a target="_blank" href="/static/img/horn1.jpg"><img class="product_img_preview" src="/static/img/preview/horn1.jpg" alt="Рога большие" title="Увеличить изображение"></a>
-                <div class="product_short_description_wrapper">
-                    <h3 class="product_description mt0">Описание товара</h3>
-                    <p class="product_short_description">Отличные большие экологически чистые без ГМО рога.</p>
-                    <button class="product_button_buy">Купить в один клик</button>
-                </div>
-                <h3 class="product_description cb">Характеристики товара</h3>
-                <ul class="product_specs">
-                    <li class="product_specs_item">Что это: рога</li>
-                    <li class="product_specs_item">Цвет: коричневый</li>
-                    <li class="product_specs_item">Размер(см): 50х30х20</li>
-                    <li class="product_specs_item">Страна происхождения: Россия</li>
-                    <li class="product_specs_item">Год изготовления: 1975</li>
-                    <li class="product_specs_item"><b>Цена: 65 000руб</b></li>
-                </ul>
-                <table class="product_specs_table">
-                    <tr>
-                        <td colspan="5">Сводная таблица характеристик</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3">размеры</td>
-                        <td>ширина</td>
-                        <td>50см</td>
-                        <td>вес</td>
-                        <td>3кг</td>
-                    </tr>
-                    <tr>
-                        <td>высота</td>
-                        <td>45см</td>
-                        <td>размер</td>
-                        <td>48</td>
-                    </tr>
-                    <tr>
-                        <td>длина</td>
-                        <td>35см</td>
-                        <td>плотность</td>
-                        <td>2700кг/м<sup>3</sup></td>
-                    </tr>
-                </table>
-
-                <h3 class="product_description">Подробное описание товара</h3>
-                <p class="product_full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore praesentium optio, neque. Officiis consequuntur expedita reiciendis dicta debitis explicabo, inventore facere vero assumenda, ducimus molestiae eligendi suscipit doloremque officia eum!</p>
-                <p class="product_full_description">Molestias perspiciatis voluptatibus, tempore ullam. Et modi expedita blanditiis omnis voluptatum. Minima esse voluptate eum, blanditiis quam minus sequi debitis ad provident voluptas et, temporibus. Saepe praesentium perferendis corporis aspernatur.</p>
-                <p class="product_full_description">Officia quis vel eos, facilis, molestias id asperiores necessitatibus inventore distinctio qui repellendus vitae adipisci repudiandae possimus voluptatem. Labore dolorem quidem, aut alias! Rerum aut, voluptates quia, provident excepturi deleniti.</p>
-            </div>
-        </main>
-
-        <footer class="footer">
-            <p class="footer_text">"Рога и копыта"&copy; 2019. Все права защищены.</p>
-        </footer>
+        <h3 class="product_description">Подробное описание товара</h3>
+        <p class="product_full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore praesentium
+            optio, neque. Officiis consequuntur expedita reiciendis dicta debitis explicabo, inventore facere vero
+            assumenda, ducimus molestiae eligendi suscipit doloremque officia eum!</p>
+        <p class="product_full_description">Molestias perspiciatis voluptatibus, tempore ullam. Et modi expedita
+            blanditiis omnis voluptatum. Minima esse voluptate eum, blanditiis quam minus sequi debitis ad provident
+            voluptas et, temporibus. Saepe praesentium perferendis corporis aspernatur.</p>
+        <p class="product_full_description">Officia quis vel eos, facilis, molestias id asperiores necessitatibus
+            inventore distinctio qui repellendus vitae adipisci repudiandae possimus voluptatem. Labore dolorem quidem,
+            aut alias! Rerum aut, voluptates quia, provident excepturi deleniti.</p>
     </div>
-<!-- lesson 1 -->
-</body>
-
-</html>
+{% endblock %}

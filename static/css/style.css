@@ -1,5 +1,4 @@
-/* lesson 1*/
-
+{% load staticfiles %}
 * {
     transition: .1s linear;
 }
@@ -83,6 +82,11 @@ main {
 }
 
 .menu_list_item:hover {
+    background-color: orange;
+    color: #fff;
+}
+
+.menu_active {
     background-color: orange;
     color: #fff;
 }

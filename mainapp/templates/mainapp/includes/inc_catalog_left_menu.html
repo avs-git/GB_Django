@@ -1,0 +1,20 @@
+<div class="left_menu">
+    <ul>
+        {% for category in menu_categories_list %}
+            <li><a href="/catalog/{{ category.pk }}"
+                   {% if category.pk == cat_id %}class="left_menu_active_link"{% endif %}>{{ category.name }}</a></li>
+            {% if menu_subcategories_list and category.pk == cat_id %}
+                <li>
+                    <ul>
+                        {% for subcategory in menu_subcategories_list %}
+                            <li><a href="/catalog/{{ cat_id }}/{{ subcategory.pk }}"
+                                   {% if subcategory.pk == subcat_id %}class="left_menu_active_link"{% endif %}>{{ subcategory.name }}
+                            </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

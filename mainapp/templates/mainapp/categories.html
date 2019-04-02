@@ -1,0 +1,18 @@
+{% extends 'mainapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="content_wrapper">
+        {% include 'mainapp/includes/inc_catalog_left_menu.html' %}
+        <main class="content_holder">
+            {% for item in items_list %}
+                <a class="product_item" href="{{ item.pk }}">
+                    <img src="/media/{{ item.image_preview }}" alt="{{ item.name }}"/>
+                    <h4>{{ item.name }}</h4>
+                </a>
+            {% endfor %}
+        </main>
+    </div>
+
+{% endblock %}

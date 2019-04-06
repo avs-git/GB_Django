@@ -1,9 +1,25 @@
 <ul class="menu_list">
     {% for menu_item in links_main_menu %}
-{#        <span>{{ request.resolver_match.view_name }}|{{ menu_item.href }}</span>#}
+        {#        <span>{{ request.resolver_match.view_name }}|{{ menu_item.href }}</span>#}
         <a href="{% url menu_item.href %}"
            class="menu_list_item{% if request.resolver_match.view_name == menu_item.href %} menu_active{% endif %}">
             {{ menu_item.name }}
         </a>
     {% endfor %}
+    <li class="menu_list_item" style=":hover:none;">|</li>
+
+    {% if user.is_authenticated %}
+        <li class="menu_list_item">
+            <a href="{% url 'auth:edit' %}">
+                {{ user.first_name|default:'Пользователь' }}
+            </a>
+        </li>
+    {% endif %}
+    <li class="menu_list_item">
+        {% if user.is_authenticated %}
+            <a href="{% url 'auth:logout' %}">выйти</a>
+        {% else %}
+            <a href="{% url 'auth:login' %}">войти</a>
+        {% endif %}
+    </li>
 </ul>

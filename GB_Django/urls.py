@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^catalog/', include('mainapp.urls', namespace='products')),
     url(r'^contacts/', mainapp.contacts, name='contacts'),
     url(r'^admin/', admin.site.urls),
+    url('auth/', include('authapp.urls', namespace='auth'))
 ]
 
 if settings.DEBUG:

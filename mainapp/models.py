@@ -8,7 +8,9 @@ class ProductCategory(models.Model):
 
     name = models.CharField(verbose_name='имя', max_length=64, unique=True)
     description = models.TextField(verbose_name='описание', blank=True)
-    image_preview = models.ImageField(verbose_name='Картинка категории', upload_to='products_images/preview', blank=True)
+    image_preview = models.ImageField(verbose_name='Картинка категории. Preview', upload_to='products_images/preview',
+                                      blank=True)
+    image = models.ImageField(verbose_name='Картинка категории', upload_to='products_images/preview', blank=True)
 
     def get_id(self):
         return self.pk
@@ -25,7 +27,8 @@ class SubCategory(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='имя подкатегории', max_length=128)
     description = models.TextField(verbose_name='описание подкатегории', blank=True)
-    image_preview = models.ImageField(verbose_name='Картинка подкатегории', upload_to='products_images/preview', blank=True)
+    image_preview = models.ImageField(verbose_name='Preview/ подкатегории', upload_to='products_images/preview', blank=True)
+    image = models.ImageField(verbose_name='Картинка подкатегории', upload_to='products_images/preview', blank=True)
 
     def get_id(self):
         return self.pk
@@ -39,17 +42,18 @@ class Product(models.Model):
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
-    category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='имя продукта', max_length=128)
     image = models.ImageField(verbose_name='Изображение товара', upload_to='products_images', blank=True)
     image_preview = models.ImageField(verbose_name='Preview', upload_to='products_images/preview', blank=True)
     short_desc = models.CharField(verbose_name='краткое описание продукта', max_length=60, blank=True)
     description = models.TextField(verbose_name='описание продукта', blank=True)
     price = models.DecimalField(verbose_name='цена продукта', max_digits=8, decimal_places=2, default=0)
+    SKU = models.CharField(verbose_name='Артикул', max_length=25)
     quantity = models.PositiveIntegerField(verbose_name='количество на складе', default=0)
 
     def get_id(self):
         return self.pk
 
     def __str__(self):
-        return f"{self.name} ({self.category.name} ({self.category.category.name}))"
+        return f"{self.name} ({self.subcategory.name} ({self.subcategory.category.name}))"

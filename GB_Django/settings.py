@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainapp.apps.MainappConfig'
+    'mainapp.apps.MainappConfig',
+    'authapp.apps.AuthappConfig'
 ]
 
 MIDDLEWARE = [
@@ -98,6 +99,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'authapp.ShopUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

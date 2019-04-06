@@ -49,7 +49,7 @@ def subCategories(request, cat_id):
 def productsOfCategory(request, cat_id, subcat_id):
     categories_list = ProductCategory.objects.all()
     subcategories_list = SubCategory.objects.filter(category=cat_id)
-    products_list = Product.objects.filter(category=subcat_id)
+    products_list = Product.objects.filter(subcategory=subcat_id)
     return render(request, 'mainapp/categories.html', ({'title': name_categories,
                                                         'links_main_menu': links_main_menu,
                                                         'items_list': products_list,

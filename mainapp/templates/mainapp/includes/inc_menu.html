@@ -10,6 +10,11 @@
 
     {% if user.is_authenticated %}
         <li class="menu_list_item">
+            <a href="{% url 'basket:view' %}" class="basket">
+                {{ basket.sum|default:'0' }}
+            </a>
+        </li>
+        <li class="menu_list_item">
             <a href="{% url 'auth:edit' %}">
                 {{ user.first_name|default:'Пользователь' }}
             </a>

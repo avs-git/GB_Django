@@ -1,4 +1,9 @@
-{% load staticfiles %}
+{
+%
+load
+staticfiles
+%
+}
 * {
     transition: .1s linear;
 }
@@ -133,7 +138,6 @@ main {
 }
 
 
-
 /*Заголовок*/
 
 .header_heading {
@@ -179,7 +183,6 @@ main {
 }
 
 
-
 /*каталог*/
 
 .products_list_wrapper {
@@ -216,7 +219,6 @@ main {
 }
 
 /*Описание на странице товара*/
-
 
 
 .product_description {
@@ -360,7 +362,6 @@ main {
 }
 
 
-
 .feedback_button {
     width: 152px;
     height: 30px;
@@ -375,4 +376,15 @@ main {
 
 .feedback_button_submit {
     background-color: #7f7;
+}
+
+/*basket*/
+
+.basket_table {
+    border-collapse: collapse;
+}
+
+.basket_table_td {
+    border: 1px solid grey;
+    padding: 10px;
 }

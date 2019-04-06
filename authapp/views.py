@@ -5,8 +5,9 @@ from django.urls import reverse
 from authapp.forms import ShopUserRegisterForm
 from authapp.forms import ShopUserEditForm
 
-# импортируем главное меню для отображения на всех страницах
-from mainapp.views import links_main_menu
+# импортируем главное меню и корзину для отображения на всех страницах
+from mainapp.views import common_content
+
 
 
 def login(request):
@@ -22,7 +23,11 @@ def login(request):
             auth.login(request, user)
             return HttpResponseRedirect(reverse('index'))
 
-    content = {'title': title, 'login_form': login_form, 'links_main_menu': links_main_menu}
+    content = {
+        **common_content(request),
+        'title': title,
+        'login_form': login_form,
+    }
     return render(request, 'authapp/login.html', content)
 
 
@@ -43,7 +48,11 @@ def register(request):
     else:
         register_form = ShopUserRegisterForm()
 
-    content = {'title': title, 'register_form': register_form, 'links_main_menu': links_main_menu}
+    content = {
+        **common_content(request),
+        'title': title,
+        'register_form': register_form,
+    }
 
     return render(request, 'authapp/register.html', content)
 
@@ -59,6 +68,10 @@ def edit(request):
     else:
         edit_form = ShopUserEditForm(instance=request.user)
 
-    content = {'title': title, 'edit_form': edit_form, 'links_main_menu': links_main_menu}
+    content = {
+        **common_content(request),
+        'title': title,
+        'edit_form': edit_form,
+    }
 
     return render(request, 'authapp/edit.html', content)

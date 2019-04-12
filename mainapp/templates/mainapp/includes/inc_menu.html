@@ -9,10 +9,8 @@
     <li class="menu_list_item" style=":hover:none;">|</li>
 
     {% if user.is_authenticated %}
-        <li class="menu_list_item">
-            <a href="{% url 'basket:view' %}" class="basket">
-                {{ basket.sum|default:'0' }}
-            </a>
+        <li class="menu_list_item" id="basketIndicatorWrapper">
+            {% include 'mainapp/includes/inc_basket_indicator.html' %}
         </li>
         <li class="menu_list_item">
             <a href="{% url 'auth:edit' %}">
@@ -27,4 +25,5 @@
             <a href="{% url 'auth:login' %}">войти</a>
         {% endif %}
     </li>
+<li>*{{ request.user.id }}*</li>
 </ul>

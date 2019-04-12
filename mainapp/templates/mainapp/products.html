@@ -15,15 +15,15 @@
             <hr>
             <div class="product_wrapper">
                 <a target="_blank" href="/media/{{ product.image }}"><img class="product_img_preview"
-                                                                           src="/media/{{ product.image_preview }}"
-                                                                           alt="{{ product.name }}"
-                                                                           title="Увеличить изображение"
-                                                                           height="100"></a>
+                                                                          src="/media/{{ product.image_preview }}"
+                                                                          alt="{{ product.name }}"
+                                                                          title="Увеличить изображение"
+                                                                          height="100"></a>
                 <div class="product_short_description_wrapper">
                     <h3 class="product_description mt0">Описание товара</h3>
                     <p class="product_short_description">{{ product.short_desc }}</p>
                     <span class="product_price">{{ product.price }}</span>
-                    <a href="{% url 'basket:add' product.pk %}">Добавить в корзину</a>
+                    <a href="{% url 'basket:add' product.pk %}" id="addToBasketButton" data-product-id="{{ product.pk }}">Добавить в корзину</a>
                 </div>
                 {#        <h3 class="product_description cb">Характеристики товара</h3>#}
                 {#        <ul class="product_specs">#}
@@ -65,3 +65,9 @@
         </main>
     </div>
 {% endblock %}
+
+{% if user.is_authenticated %}
+    {% block js %}
+        <script src="{% static 'js/product_addToBasket.js' %}"></script>
+    {% endblock %}
+{% endif %}

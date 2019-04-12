@@ -2,37 +2,16 @@
 {% load staticfiles %}
 
 {% block content %}
-    {% if basket %}
-        <table class="basket_table">
-            <tr>
-                <th>Наименование</th>
-                <th>Цена</th>
-                <th>Количество</th>
-                <th>Сумма</th>
-            </tr>
-            {% for item in basket %}
-                <tr>
-                    <td class="basket_table_td"><img src="/media/{{ item.product.image_preview }}"
-                                                     alt="{{ item.product.name }}" height="50"></td>
-                    <td class="basket_table_td"><a
-                            href="{% url 'products:products' item.product.subcategory.category.pk item.product.subcategory.pk item.product.pk %}">{{ item.product.name }}</a>
-                    </td>
-                    <td class="basket_table_td">{{ item.product.price }}</td>
-                    <td class="basket_table_td"><a
-                            href="{% url 'basket:remove' item.product.pk %}">-</a> {{ item.quantity }} <a
-                            href="{% url 'basket:add' item.product.pk %}">+</a></td>
-                    <td class="basket_table_td">{{ item.sum }}</td>
-                    <td class="basket_table_td"><a href="{% url 'basket:remove_item' item.product.pk %}">Удалить</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="4" align="right">Итого:</td>
-                <td>{{ basket.sum }}</td>
-                <td><a href="{% url 'basket:drop' %}">Очистить коризну</a></td>
-            </tr>
-        </table>
-    {% else %}
-        <p>Ваша корзина пуста</p>
-    {% endif %}
+    <div class="basket_list">
+        {% include 'basketapp/includes/inc_basket_list.html' %}
+    </div>
+    <button class="btn btn-round">
+        <a href="{% url 'index' %}">
+            на главную
+        </a>
+    </button>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/basket_scripts.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,39 @@
+{% if basket %}
+        <table class="basket_table">
+            <tr>
+                <th></th>
+                <th>Наименование</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+            {% for item in basket %}
+                <tr>
+                    <td class="basket_table_td"><img src="/media/{{ item.product.image_preview }}"
+                                                     alt="{{ item.product.name }}" height="50"></td>
+                    <td class="basket_table_td"><a
+                            href="{% url 'products:products' item.product.pk %}">{{ item.product.name }}</a>
+                    </td>
+                    <td class="basket_table_td">{{ item.product.price }}</td>
+                    <td class="basket_table_td">
+                        <input type="number" name="{{ item.pk }}" min="0"
+                             value="{{ item.quantity }}">
+{#                        <a#}
+{#                            href="{% url 'basket:remove' item.product.pk %}">-</a> {{ item.quantity }} <a#}
+{#                            href="{% url 'basket:add' item.product.pk %}">+</a>#}
+                    </td>
+                    <td class="basket_table_td">{{ item.sum }}</td>
+                    <td class="basket_table_td"><a href="{% url 'basket:remove_item' item.product.pk %}">Удалить</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" align="right">Итого:</td>
+                <td>{{ basket.sum }}</td>
+                <td><a href="{% url 'basket:drop' %}">Очистить коризну</a></td>
+            </tr>
+        </table>
+    {% else %}
+        <p>Ваша корзина пуста</p>
+    {% endif %}

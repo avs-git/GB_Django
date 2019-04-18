@@ -24,9 +24,10 @@ urlpatterns = [
     url(r'^$', mainapp.main, name='index'),
     url(r'^catalog/', include('mainapp.urls', namespace='products')),
     url(r'^contacts/', mainapp.contacts, name='contacts'),
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
     url('auth/', include('authapp.urls', namespace='auth')),
-    url('basket/', include('basketapp.urls', namespace='basket'))
+    url('basket/', include('basketapp.urls', namespace='basket')),
+    url('admin/', include('adminapp.urls', namespace='admin')),
 ]
 
 if settings.DEBUG:

@@ -25,5 +25,10 @@
             <a href="{% url 'auth:login' %}">войти</a>
         {% endif %}
     </li>
-<li>*{{ request.user.id }}*</li>
+    {% if user.is_superuser %}
+        <li>
+            <a href="{% url 'admin:users' %}">админка</a>
+        </li>
+    {% endif %}
+    <li>*{{ request.user.id }}*</li>
 </ul>

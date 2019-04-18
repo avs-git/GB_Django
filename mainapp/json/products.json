@@ -1,31 +1,31 @@
 [
   {
     "name": "Копыта на шпильке",
-    "subcategory": "Копыта коровьи",
+    "category": "Копыта коровьи",
     "price": "90000",
     "quantity": "100"
   },
   {
     "name": "Копыта белые",
-    "subcategory": "Копыта коровьи",
+    "category": "Копыта коровьи",
     "price": "19000",
     "quantity": "100"
   },
   {
     "name": "Копыта чёрные",
-    "subcategory": "Копыта коровьи",
+    "category": "Копыта коровьи",
     "price": "15000",
     "quantity": "100"
   },
   {
     "name": "Рога россыпью",
-    "subcategory": "Рога оленьи",
+    "category": "Рога оленьи",
     "price": "50000",
     "quantity": "100"
   },
   {
     "name": "Рога на подставке",
-    "subcategory": "Рога оленьи",
+    "category": "Рога оленьи",
     "price": "17500",
     "quantity": "100"
   }

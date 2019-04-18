@@ -7,7 +7,7 @@
                 <li>
                     <ul>
                         {% for subcategory in menu_subcategories_list %}
-                            <li><a href="{% url 'products:subcategory' subcategory.category.id subcategory.id %}"
+                            <li><a href="{% url 'products:category' subcategory.id %}"
                                    {% if subcategory.pk == subcategory_id %}class="left_menu_active_link"{% endif %}>{{ subcategory.name }}
                             </a>
                             </li>

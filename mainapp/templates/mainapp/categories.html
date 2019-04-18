@@ -6,6 +6,9 @@
     <div class="content_wrapper">
         {% include 'mainapp/includes/inc_catalog_left_menu.html' %}
         <main class="content_holder">
+            {% for category in menu_subcategories_list %}
+                <a href="{% url 'products:category' category.pk %}">{{ category.name }}</a>
+            {% endfor %}
             {% for item in items_list %}
                 <a class="product_item" href="{% url 'products:products' item.pk %} ">
                     <img src="/media/{{ item.image_preview }}" alt="{{ item.name }}"/>

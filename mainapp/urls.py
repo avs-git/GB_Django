@@ -4,9 +4,9 @@ import mainapp.views as mainapp
 
 app_name = 'mainapp'
 
+# SETTINGS URLS = products
 urlpatterns = [
     url(r'^$', mainapp.categories, name='index'),
-    url(r'^category/(?P<cat_id>\d+)/$', mainapp.subCategories, name='category'),
-    url(r'^category/(?P<cat_id>\d+)/(?P<scat_id>\d+)/$', mainapp.productsOfCategory, name='subcategory'),
+    url(r'^category/(?P<cat_id>\d+)/$', mainapp.productsOfCategory, name='category'),
     url(r'^product/(?P<product_id>\d+)/$', mainapp.products, name='products'),
 ]

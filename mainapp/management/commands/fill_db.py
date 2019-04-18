@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from mainapp.models import ProductCategory, SubCategory, Product
+from mainapp.models import Category, Product
 from authapp.models import ShopUser
 
 import json
@@ -15,34 +15,34 @@ def load_from_json(file_name):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+
+        # КАТЕГОРИИ
         categories = load_from_json('categories')
 
-        ProductCategory.objects.all().delete()
+        Category.objects.all().delete()
         for category in categories:
-            new_category = ProductCategory(**category)
+
+            if 'parent' in category:
+                parent_category = Category.objects.get(name=category['parent'])
+                category['parent'] = parent_category
+                category['nesting_level'] = parent_category.nesting_level + 1
+
+            new_category = Category(**category)
             new_category.save()
 
-        subcategories = load_from_json('subcategories')
-
-        SubCategory.objects.all().delete()
-        for subcategory in subcategories:
-            category_name = subcategory["category"]
-            # Получаем категорию по имени
-            _category = ProductCategory.objects.get(name=category_name)
-            # Заменяем название категории объектом
-            subcategory['category'] = _category
-            new_subcategory = SubCategory(**subcategory)
-            new_subcategory.save()
-
+        # ТОВАРЫ
         products = load_from_json('products')
-
         Product.objects.all().delete()
+
         for product in products:
-            subcategory_name = product["subcategory"]
+            category_name = product['category']
             # Получаем категорию по имени
-            _subcategory = SubCategory.objects.get(name=subcategory_name)
+            _category = Category.objects.get(name=category_name)
+            print('*' * 50)
+            print(product, category_name, category)
+            print('*' * 50)
             # Заменяем название категории объектом
-            product['subcategory'] = _subcategory
+            product['category'] = _category
             new_product = Product(**product)
             new_product.save()
 

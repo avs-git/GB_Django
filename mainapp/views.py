@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from .models import ProductCategory
-from .models import SubCategory
+from .models import Category
 from .models import Product
 from basketapp.models import Basket
 import random
@@ -37,19 +36,16 @@ def common_content(request):
 
 
 def get_hot_product(**kwargs):
-    if 'category' in kwargs:
-        _products = Product.objects.filter(subcategory__category_id=kwargs['category'])
-    elif 'subcategory' in kwargs:
-        _products = Product.objects.filter(subcategory_id=int(kwargs['subcategory']))
-    else:
-        _products = Product.objects.all()
+    # if 'category' in kwargs:
+    #     _products = Product.objects.filter(category_id=kwargs['category'])
+    # else:
+    _products = Product.objects.all()
 
     return random.sample(list(_products), 1)[0]
 
 
 def get_same_products(hot_product):
-    same_products = Product.objects.filter(subcategory=hot_product.subcategory). \
-                        exclude(pk=hot_product.pk)[:3]
+    same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
 
     return same_products
 
@@ -65,12 +61,12 @@ def main(request):
 def categories(request):
     hot_product = get_hot_product()
     same_products = get_same_products(hot_product)
-    categories_list = ProductCategory.objects.all()
+    categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
     content = {
         **common_content(request),
         'title': name_categories,
-        'items_list': categories_list,
         'menu_categories_list': categories_list,
+        'menu_subcategories_list': categories_list,
         'hot_product': hot_product,
         'same_products': same_products,
         'type': 'categories',
@@ -78,31 +74,40 @@ def categories(request):
     return render(request, 'mainapp/categories.html', content)
 
 
-def subCategories(request, cat_id):
+# def subCategories(request, cat_id):
+#     hot_product = get_hot_product(category=cat_id)
+#     same_products = get_same_products(hot_product)
+#     categories_list = Category.objects.all()
+#     subcategories_list = Category.objects.filter(category=cat_id)
+#     content = {
+#         **common_content(request),
+#         'title': name_categories,
+#         'items_list': subcategories_list,
+#         'menu_categories_list': categories_list,
+#         'menu_subcategories_list': subcategories_list,
+#         'hot_product': hot_product,
+#         'same_products': same_products,
+#         'cat_id': int(cat_id),
+#         'type': 'subCategories',
+#     }
+#     return render(request, 'mainapp/categories.html', content)
+
+
+def productsOfCategory(request, cat_id):
     hot_product = get_hot_product(category=cat_id)
     same_products = get_same_products(hot_product)
-    categories_list = ProductCategory.objects.all()
-    subcategories_list = SubCategory.objects.filter(category=cat_id)
-    content = {
-        **common_content(request),
-        'title': name_categories,
-        'items_list': subcategories_list,
-        'menu_categories_list': categories_list,
-        'menu_subcategories_list': subcategories_list,
-        'hot_product': hot_product,
-        'same_products': same_products,
-        'cat_id': int(cat_id),
-        'type': 'subCategories',
-    }
-    return render(request, 'mainapp/categories.html', content)
+    categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
+    subcategories_list = Category.objects.filter(parent=cat_id).filter(is_active=True)
+    this_category = Category.objects.get(id=cat_id)
+    products_list = Product.objects.filter(category=cat_id).filter(is_active=True)
 
+    # Если в этой категории нет товаров, то смотрим в дочерней
+    if len(products_list) == 0:
+        if len(Category.objects.filter(parent=cat_id)) != 0:
+            child_category = Category.objects.filter(parent=cat_id)
+            for _category in child_category:
+                products_list = Product.objects.filter(category=_category.pk)
 
-def productsOfCategory(request, cat_id, scat_id):
-    hot_product = get_hot_product(subcategory=scat_id)
-    same_products = get_same_products(hot_product)
-    categories_list = ProductCategory.objects.all()
-    subcategories_list = SubCategory.objects.filter(category=scat_id)
-    products_list = Product.objects.filter(subcategory=scat_id)
     content = {
         **common_content(request),
         'title': name_categories,
@@ -110,20 +115,19 @@ def productsOfCategory(request, cat_id, scat_id):
         'menu_categories_list': categories_list,
         'menu_subcategories_list': subcategories_list,
         'cat_id': int(cat_id),
-        'subcategory_id': int(scat_id),
         'hot_product': hot_product,
         'same_products': same_products,
         'type': 'productsOfCategory',
     }
+
     return render(request, 'mainapp/categories.html', content)
 
 
 def products(request, product_id):
     product_item = Product.objects.get(pk=product_id)
-    categories_list = ProductCategory.objects.all()
-    subcategories_list = SubCategory.objects.filter(category=product_item.subcategory.category)
-    cat_id = product_item.subcategory.category.id
-    subcategory_id = product_item.subcategory.id
+    categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
+    subcategories_list = Category.objects.filter(parent=product_item.category).filter(is_active=True)
+    cat_id = product_item.category.id
     content = {
         **common_content(request),
         'title': name_products,
@@ -131,7 +135,6 @@ def products(request, product_id):
         'menu_categories_list': categories_list,
         'menu_subcategories_list': subcategories_list,
         'cat_id': int(cat_id),
-        'subcategory_id': int(subcategory_id),
         'type': 'products',
     }
 

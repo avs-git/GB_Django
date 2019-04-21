@@ -4,12 +4,15 @@
 {% block content %}
     <div class="products_list">
         <button class="new_product">
-            <a href={% url 'admin:product_create' category.pk %}>
+            <a href={% url 'admin:product_create' pk %}>
                 новый продукт
             </a>
         </button>
 
-        {% for object in objects %}
+        {% if object_list.count == 0 %}
+            <p>В данной категории нет товаров</p>
+        {% endif %}
+        {% for object in object_list %}
             <div class="product_record">
                 <img
                         src="/media/{{ object.image|default:'products_images/default.jpg' }}"
@@ -18,11 +21,6 @@
                     {{ object.name|title }}
                 </div>
                 <div class="product_actions">
-                    <button>
-                        <a href={% url 'admin:product_read' object.pk %}>
-                            подробнее
-                        </a>
-                    </button>
                     <button>
                         <a href={% url 'admin:product_update' object.pk %}>
                             редактировать

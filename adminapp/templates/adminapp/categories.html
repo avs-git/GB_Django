@@ -1,5 +1,6 @@
 {% extends 'adminapp/base.html' %}
 {% load staticfiles %}
+{% load admin_tags %}
 
 {% block content %}
     <div class="categories_list">
@@ -9,7 +10,7 @@
             </a>
         </button>
 
-        {% for object in objects %}
+        {% for object in object_list %}
             <div class="category_record">
                 <div class="category_name">
                     <span style="{% if not object.is_active %}color:#777;{% endif %}">{{ object.name|title }}</span>
@@ -17,7 +18,7 @@
                 <div class="category_actions">
                     <button>
                         <a href={% url 'admin:products' object.pk %}>
-                            товары категории
+                            товары категории ({{ object|products_count }})
                         </a>
                     </button>
                     <button>

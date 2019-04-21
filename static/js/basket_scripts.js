@@ -10,6 +10,5 @@ window.onload = function () {
       HttpRequest.send();
     }
     
-    event.preventDefault();
   });
 }

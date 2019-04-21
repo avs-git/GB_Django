@@ -20,6 +20,9 @@ from django.conf.urls.static import static
 from django.conf.urls import include
 import mainapp.views as mainapp
 
+if settings.DEBUG:
+    import debug_toolbar
+
 urlpatterns = [
     url(r'^$', mainapp.main, name='index'),
     url(r'^catalog/', include('mainapp.urls', namespace='products')),
@@ -28,7 +31,8 @@ urlpatterns = [
     url('auth/', include('authapp.urls', namespace='auth')),
     url('basket/', include('basketapp.urls', namespace='basket')),
     url('admin/', include('adminapp.urls', namespace='admin')),
+    url('__debug__/', include(debug_toolbar.urls)),
+    url('^social/', include('social_django.urls', namespace='social')),
 ]
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

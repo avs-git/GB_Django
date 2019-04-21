@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="user_delete">
-        Уверены, что хотите удалить {{ category_to_delete.username }}
-        {% if category_to_delete.name %}
-            ({{ category_to_delete.name|title }}
+        Уверены, что хотите удалить {{ category.username }}
+        {% if kwargs.name %}
+            ({{ category.name|title }}
         {% endif %}
         ?
-        <form action="{% url 'admin:category_delete' category_to_delete.pk %}"
+        <form action="{% url 'admin:category_delete' category.pk %}"
               method="post">
             {% csrf_token %}
             <input class="btn btn-danger" type="submit" value="удалить">

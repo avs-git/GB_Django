@@ -1,3 +1,5 @@
-    <a href="{% url 'basket:view' %}" class="basket" id="basketSum">
-        {{ basket.sum }}
-    </a>
+{% load my_tags %}
+
+<a href="{% url 'basket:view' %}" class="basket" id="basketSum">
+    {{ request.user|basket_total_cost }}
+</a>

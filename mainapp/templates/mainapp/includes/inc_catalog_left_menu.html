@@ -1,13 +1,13 @@
 <div class="left_menu">
     <ul>
         {% for category in menu_categories_list %}
-            <li><a href="{% url 'products:category' category.id %}"
+            <li><a href="{% url 'products:category' category.id 1 %}"
                    {% if category.pk == cat_id %}class="left_menu_active_link"{% endif %}>{{ category.name }}</a></li>
             {% if menu_subcategories_list and category.pk == cat_id %}
                 <li>
                     <ul>
                         {% for subcategory in menu_subcategories_list %}
-                            <li><a href="{% url 'products:category' subcategory.id %}"
+                            <li><a href="{% url 'products:category' subcategory.id 1 %}"
                                    {% if subcategory.pk == subcategory_id %}class="left_menu_active_link"{% endif %}>{{ subcategory.name }}
                             </a>
                             </li>

@@ -3,6 +3,7 @@ from .models import Category
 from .models import Product
 from basketapp.models import Basket
 import random
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Названия страниц для title и названия в меню
 name_main = 'Главная'
@@ -35,10 +36,7 @@ def common_content(request):
     return content
 
 
-def get_hot_product(**kwargs):
-    # if 'category' in kwargs:
-    #     _products = Product.objects.filter(category_id=kwargs['category'])
-    # else:
+def get_hot_product():
     _products = Product.objects.all()
 
     return random.sample(list(_products), 1)[0]
@@ -93,13 +91,12 @@ def categories(request):
 #     return render(request, 'mainapp/categories.html', content)
 
 
-def productsOfCategory(request, cat_id):
+def productsOfCategory(request, cat_id, page=1):
     hot_product = get_hot_product(category=cat_id)
     same_products = get_same_products(hot_product)
-    categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
-    subcategories_list = Category.objects.filter(parent=cat_id).filter(is_active=True)
-    this_category = Category.objects.get(id=cat_id)
-    products_list = Product.objects.filter(category=cat_id).filter(is_active=True)
+    categories_list = Category.objects.filter(nesting_level=0, is_active=True)
+    subcategories_list = Category.objects.filter(parent=cat_id, is_active=True)
+    products_list = Product.objects.filter(category=cat_id, category__is_active=True, is_active=True)
 
     # Если в этой категории нет товаров, то смотрим в дочерней
     if len(products_list) == 0:
@@ -107,11 +104,17 @@ def productsOfCategory(request, cat_id):
             child_category = Category.objects.filter(parent=cat_id)
             for _category in child_category:
                 products_list = Product.objects.filter(category=_category.pk)
-
+    paginator = Paginator(products_list, 2)
+    try:
+        products_paginator = paginator.page(page)
+    except PageNotAnInteger:
+        products_paginator = paginator.page(1)
+    except EmptyPage:
+        products_paginator = paginator.page(paginator.num_pages)
     content = {
         **common_content(request),
         'title': name_categories,
-        'items_list': products_list,
+        'items_list': products_paginator,
         'menu_categories_list': categories_list,
         'menu_subcategories_list': subcategories_list,
         'cat_id': int(cat_id),

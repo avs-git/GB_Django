@@ -24,7 +24,7 @@ class CategoryEditForm(forms.ModelForm):
 
 class ProductEditForm(forms.ModelForm):
     class Meta:
-        model = Product
+        model = Product({'category_id': 1})
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):

@@ -1,0 +1,47 @@
+{% extends 'adminapp/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <div class="h2 text-center head">
+        Заказы пользователей
+    </div>
+    <table class="table orders_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Создан</th>
+            <th>Обновлен</th>
+            <th>Сумма заказа</th>
+            <th>Количество товаров</th>
+            <th>Статус</th>
+            <th>Пользователь</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in object_list %}
+            {% if item.is_active %}
+                <tr>
+                    <td class="td1 orders_list">{{ item.pk }}</td>
+                    <td>{{ item.created|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ item.updated|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ item.get_total_cost }}</td>
+                    <td>{{ item.get_total_quantity }}</td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td>{{ item.user }}</td>
+                    <td>
+                        <a href="{% url 'adminapp:order_update' item.pk %}">
+                            редактировать
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'adminapp:order_delete' item.pk %}">
+                            удалить
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

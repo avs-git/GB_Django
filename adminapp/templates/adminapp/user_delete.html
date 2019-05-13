@@ -6,19 +6,23 @@
     <div class="user_delete">
         Уверены, что хотите удалить {{ user_to_delete.username }}
         {% if user_to_delete.first_name %}
-            ({{ user_to_delete.first_name|title }}</b>
-            {% if user_to_delete.last_name %}
-                {{ user_to_delete.last_name|title }}
-            {% endif %})
+            ({{ user_to_delete.first_name|title }}
         {% endif %}
+        {% if user_to_delete.last_name %}
+            {{ user_to_delete.last_name|title }}
+        {% endif %})
         ?
-        <form action="{% url 'admin:user_delete' user_to_delete.pk %}"
-              method="post">
+        <form method="post" action="{% url 'myadmin:user_delete' user_to_delete.pk %}">
             {% csrf_token %}
-            <input class="btn btn-danger" type="submit" value="удалить">
+            <label for="deleteCheckBox">
+                <input type="checkbox" id="deleteCheckBox" name="delete" value="1">
+                удалить
+            </label>
+            <input class="btn btn-danger" type="submit" value="применить">
+
         </form>
         <button class="btn btn-success">
-            <a href="{% url 'admin:users' %}">
+            <a href="{% url 'myadmin:users' %}">
                 Отмена
             </a>
         </button>

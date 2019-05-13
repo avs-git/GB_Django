@@ -5,11 +5,13 @@
            class="menu_list_item{% if request.resolver_match.view_name == menu_item.href %} menu_active{% endif %}">
             {{ menu_item.name }}
         </a>
+    {% empty %}
+        <span>что-то не так</span>
     {% endfor %}
     <li class="menu_list_item" style=":hover:none;">|</li>
 
     {% if user.is_authenticated %}
-        <li class="menu_list_item" id="basketIndicatorWrapper">
+        <li class="menu_list_item popup_menu_holder" id="basketIndicatorWrapper">
             {% include 'mainapp/includes/inc_basket_indicator.html' %}
         </li>
         <li class="menu_list_item">
@@ -26,9 +28,8 @@
         {% endif %}
     </li>
     {% if user.is_superuser %}
-        <li>
-            <a href="{% url 'admin:users' %}">админка</a>
+        <li class="menu_list_item">
+            <a href="{% url 'myadmin:users' %}" style="color:red;">админка</a>
         </li>
     {% endif %}
-    <li>*{{ request.user.id }}*</li>
 </ul>

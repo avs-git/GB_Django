@@ -4,12 +4,14 @@
 {% block content %}
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <br>
         <input class="form-control" type="submit" value="сохранить">
     </form>
-    <button class="btn btn-round form-control last">
-        <a href="{% url 'admin:categories' %}">
+    <br>
+        <a href="{% url 'myadmin:categories' %}">
             к списку категорий
         </a>
-    </button>
 {% endblock %}

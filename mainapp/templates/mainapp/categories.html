@@ -6,60 +6,101 @@
     <div class="content_wrapper">
         {% include 'mainapp/includes/inc_catalog_left_menu.html' %}
         <main class="content_holder">
-            <div class="promo">
-                <div>
-                    <h2>Товар дня:</h2>
-                    <a href="{% url 'products:products' hot_product.pk %}">
-                        <img src="/media/{{ hot_product.image_preview }}" alt="{{ hot_product.name }}" height="200">
-                        <h4>{{ hot_product.name }}</h4>
-                        <span>{{ hot_product.price }}</span>
-                    </a>
-                </div>
 
-                {% for item in same_products %}
-                    <div class="block">
-                        <a href="{% url 'products:products' item.pk %}"><img src="/media/{{ item.image }}" alt=""
-                                                                             height="200">
-                            <div class="text">
-                                <h4>{{ item.name }}</h4>
-                                <p>{{ item.short_desc }} </p>
-                            </div>
+            {# КАТЕГОРИИ #}
+            {% if menu_subcategories_list %}
+                <div>
+                    <h1>Категории</h1>
+                    <div class="product_block_wrapper">
+                        {% for category in menu_subcategories_list %}
+                            <a href="{% url 'products:category' category.pk '1' %}" class="product_item_wrapper">
+                                <img src="/media/{{ category.image_preview|default:'products_images/default.jpg' }}"
+                                     height="70"
+                                     alt="{{ category.name }}"><br>
+                                {{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {#        Товар дня#}
+            {% if not items_list %}
+                <div class="promo">
+                    <div class="product_of_day_div">
+                        <h2>Товар дня:</h2>
+                        <a href="{% url 'products:products' hot_product.pk %}">
+                            <img src="/media/{{ hot_product.image_preview|default:'products_images/default.jpg' }}"
+                                 alt="{{ hot_product.name }}" height="200">
+                            <h4>{{ hot_product.name }}</h4>
+                            <span>{{ hot_product.price }}</span>
                         </a>
                     </div>
-                {% endfor %}
 
-            </div>
-            <div>
-                <h1>Категории</h1>
-                {% for category in menu_subcategories_list %}
-                    <a href="{% url 'products:category' category.pk '1' %}">{{ category.name }}</a>
-                {% endfor %}
-            </div>
-            <div>
-                <h1>Товары</h1>
-                {% for item in items_list %}
-                    <a class="product_item" href="{% url 'products:products' item.pk %} ">
-                        <img src="/media/{{ item.image_preview }}" alt="{{ item.name }}"/>
-                        <h4>{{ item.name }}</h4>
-                    </a>
-                {% endfor %}
-            </div>
-            <div class="paginator">
-                {% if products.has_previous %}
-                    <a href="{% url 'products:page' category.pk products.previous_page_number %}">
-                        <
-                    </a>
-                {% endif %}
-                <span class="current">
-            страница {{ products.number }} из
-            {{ products.paginator.num_pages }}
+                    {% for item in same_products %}
+                        <div class="same_promo_div">
+                            <a href="{% url 'products:products' item.pk %}"><img
+                                    src="/media/{{ item.image|default:'products_images/default.jpg' }}" alt=""
+                                    height="200">
+                                <div class="text">
+                                    <h4>{{ item.name }}</h4>
+                                    <p>{{ item.price }}</p>
+                                    <p>{{ item.short_desc }} </p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            {#        Товары#}
+            {% if items_list %}
+                <div>
+                    <h1>Товары</h1>
+                    <div class="product_block_wrapper">
+                        {% for item in items_list %}
+                            <div>
+                                {% if user.is_superuser %}
+                                    <a href="{% url 'myadmin:product_update' item.pk %}" class="superuser_edit">
+                                        <img
+                                                src="{% static 'img/edit.png' %}"
+                                                alt="редактировать"
+                                                title="редактировать товар в админке">
+                                    </a>
+                                {% endif %}
+                                <a class="product_item" href="{% url 'products:products' item.pk %} ">
+                                    <img src="/media/{{ item.image_preview|default:'products_images/default.jpg' }}"
+                                         alt="{{ item.name }}"/>
+                                    <h4>{{ item.name }}
+                                    </h4>
+                                    <p>{{ item.price }}руб.</p>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {#        Пагинатор#}
+            {% if paginator.num_pages > 1 %}
+                <div class="paginator">
+                    {% if page_obj.has_previous %}
+                        <a href="{% url 'products:category' cat_id page_obj.previous_page_number %}">
+                            <
+                        </a>
+                    {% endif %}
+                    <span class="current">
+            страница {{ page_obj.number }} из
+            {{ paginator.num_pages }}
           </span>
-                {% if products.has_next %}
-                    <a href="{% url 'products:page' category.pk products.next_page_number %}">
-                        >
-                    </a>
-                {% endif %}
-            </div>
+                    {% if page_obj.has_next %}
+                        <a href="{% url 'products:category' cat_id page_obj.next_page_number %}">
+                            >
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </main>
     </div>
 

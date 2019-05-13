@@ -4,44 +4,38 @@
 {% block content %}
     <div class="products_list">
         <button class="new_product">
-            <a href={% url 'admin:product_create' pk %}>
+            <a href={% url 'myadmin:product_create' pk %}>
                 новый продукт
             </a>
         </button>
 
-        {% if object_list.count == 0 %}
-            <p>В данной категории нет товаров</p>
-        {% endif %}
-        {% for object in object_list %}
-            <div class="product_record">
-                <img
-                        src="/media/{{ object.image|default:'products_images/default.jpg' }}"
-                        alt="{{ object.name }}" height="200">
-                <div class="product_name">
-                    {{ object.name|title }}
-                </div>
-                <div class="product_actions">
-                    <button>
-                        <a href={% url 'admin:product_update' object.pk %}>
-                            редактировать
-                        </a>
-                    </button>
-                    <button>
-                        <a href={% url 'admin:product_delete' object.pk %}>
-                            удалить
-                        </a>
-                    </button>
-                </div>
-                <div class="summary">
-                    <b>цена</b>
-                    <p>{{ object.price }} руб</p>
-                    <b>количество</b>
-                    <p>{{ object.quantity }}</p>
-                </div>
-                <div class="product_desc">
-                    {{ object.short_desc|title }}
-                </div>
-            </div>
-        {% endfor %}
+        <table class="admin_product_table">
+            <tr>
+                <td>Название</td>
+                <td>Изображение</td>
+                <td>Цена</td>
+                <td>Количество</td>
+                <td></td>
+            </tr>
+            {% for object in object_list %}
+                <tr>
+                    <td><img
+                            src="/media/{{ object.image|default:'products_images/default.jpg' }}"
+                            alt="{{ object.name }}" height="70"></td>
+                    <td>{{ object.name|title }}</td>
+                    <td>{{ object.price }} руб</td>
+                    <td>{{ object.quantity }}</td>
+                    <td>
+                        <a href={% url 'myadmin:product_update' object.pk %}>редактировать</a><br>
+                        <a href={% url 'myadmin:product_delete' object.pk %}>удалить</a>
+                    </td>
+
+                </tr>
+            {% empty %}
+               <tr>
+                    <td colspan="5" align="center">Товаров нет</td>
+               </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}

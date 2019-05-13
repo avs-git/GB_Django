@@ -9,13 +9,17 @@
             ({{ category.name|title }}
         {% endif %}
         ?
-        <form action="{% url 'admin:category_delete' category.pk %}"
+        <form action="{% url 'myadmin:category_delete' category.pk %}"
               method="post">
             {% csrf_token %}
+            <label for="deleteCheckBox">
+                <input type="checkbox" id="deleteCheckBox" name="delete" value="1">
+                удалить из базы
+            </label>
             <input class="btn btn-danger" type="submit" value="удалить">
         </form>
         <button class="btn btn-success">
-            <a href="{% url 'admin:categories' %}">
+            <a href="{% url 'myadmin:categories' %}">
                 Отмена
             </a>
         </button>

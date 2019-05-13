@@ -4,57 +4,56 @@
 {% block content %}
     <div class="users_list">
         <button class="new_user">
-            <a href={% url 'admin:user_create' %}>
+            <a href={% url 'myadmin:user_create' %}>
                 новый пользователь
             </a>
         </button>
-        {% for object in object_list %}
-            <div
-                    class="user_record {% if not object.is_active %}not_active{% endif %}">
-                <img
-                        src="/media/{{ object.avatar|default:'users_avatars/default.jpg' }}"
-                        alt="{{ object.username }}" height="250">
-                <div class="user_role">
-                    {% if object.is_superuser %}
-                        администратор
-                    {% else %}
-                        пользователь
-                    {% endif %}
-                    <button>
-                        <a href={% url 'admin:user_update' object.pk %}>
-                            редактировать
-                        </a>
-                    </button>
-                    <button>
-                        <a href={% url 'admin:user_delete' object.pk %}>
-                            удалить
-                        </a>
-                    </button>
-                </div>
-                <div class="user_name">
-                    <p><strong>{{ object.username }}</strong></p>
-                    <p>
+
+
+        <table class="admin_product_table">
+            <tr>
+                <td></td>
+                <td>Имя</td>
+                <td>Роль</td>
+                <td>Инфо</td>
+                <td></td>
+            </tr>
+            {% for object in object_list %}
+                <tr class="{% if not object.is_active %}not_active{% endif %}">
+                    <td><img src="/media/{{ object.avatar|default:'users_avatars/default.jpg' }}"
+                            alt="{{ object.username }}" height="70"></td>
+                    <td>
+
                         {% if object.first_name %}
                             <b>{{ object.first_name|title }}</b>
                             {% if object.last_name %}
                                 <p>{{ object.last_name|title }}</p>
                             {% endif %}
-                        {% endif %}
-                    </p>
-                </div>
-                <div class="user_age">
-                    age:<br>
-                    {{ object.age }} лет
-                </div>
-                <div class="user_email">
-                    email:<br>
-                    {{ object.email }}
-                </div>
-                <div class="user_lastlogin">
-                    logged:<br>
-                    {{ object.last_login }}
-                </div>
-            </div>
-        {% endfor %}
+                        {% endif %}<br>
+                        login: {{ object.username }}
+                    </td>
+                    <td>
+                        {% if object.is_superuser %}
+                            администратор
+                        {% else %}
+                            пользователь
+                        {% endif %}</td>
+                    <td>
+                            возраст: {{ object.age }} лет<br>
+                            email: {{ object.email }}<br>
+                            logged: {{ object.last_login }}
+                    </td>
+                    <td>
+                        <a href={% url 'myadmin:user_update' object.pk %}>редактировать</a><br>
+                        <a href={% url 'myadmin:user_delete' object.pk %}>удалить</a>
+                    </td>
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" align="center">Пользователей нет</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}

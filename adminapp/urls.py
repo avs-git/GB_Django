@@ -18,4 +18,9 @@ urlpatterns = [
     path('products/read/category/<int:pk>/', adminapp.ProductListView.as_view(), name='products'),
     path('products/update/<int:pk>/', adminapp.ProductUpdateView.as_view(), name='product_update'),
     path('products/delete/<int:pk>/', adminapp.ProductDeleteView.as_view(), name='product_delete'),
+
+    path('orders/', adminapp.OrderListView.as_view(), name='orders'),
+    path('orders/update/<int:pk>/', adminapp.OrderUpdateView.as_view(), name='order_update'),
+    path('orders/delete/<int:pk>/', adminapp.OrderDeleteView.as_view(), name='order_delete'),
+    path('orders/change_status/<int:pk>/', adminapp.order_change_status, name='order_change_status'),
 ]

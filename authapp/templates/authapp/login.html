@@ -15,5 +15,6 @@
         <input class="form-control" type="submit" value="войти">
     </form>
     <a href="{% url 'auth:register' %}">Или зарегистрируйтесь</a>
-    <a href="/social/login/vk-oauth2/">VK</a>
+    <p><a href="{% url 'social:begin' 'vk-oauth2' %}">VK</a><br>
+    <p><a href="{% url 'social:begin' 'google-oauth2' %}">Google+</a><br>
 {% endblock %}

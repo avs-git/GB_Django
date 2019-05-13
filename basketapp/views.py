@@ -17,6 +17,10 @@ def basket(request):
     basket = Basket.objects.filter(user=request.user)
     basket.sum = 0
     for item in basket:
+        if item.quantity == 0:
+            item.delete()
+            continue
+
         item.sum = item.product.price * item.quantity
         basket.sum += item.sum
     content = {
@@ -29,7 +33,6 @@ def basket(request):
 
 @login_required
 def basket_add(request, pk):
-
     product = get_object_or_404(Product, pk=pk)
 
     basket = Basket.objects.filter(user=request.user, product=product).first()
@@ -56,10 +59,10 @@ def basket_remove(request, pk):
         basket = Basket(user=request.user, product=product)
 
     basket.quantity -= 1
-    if basket.quantity == 0:
-        basket.delete()
-    else:
-        basket.save()
+    if basket.quantity <= 0:
+        basket.quantity = 0
+
+    basket.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -85,18 +88,24 @@ def basket_drop(request):
 def basket_edit(request, pk, quantity):
     if request.is_ajax():
         quantity = int(quantity)
-        new_basket_item = Basket.objects.get(pk=int(pk))
+        new_basket_item = get_object_or_404(Basket, pk=int(pk))
 
         if quantity > 0:
             new_basket_item.quantity = quantity
-            new_basket_item.save()
         else:
-            new_basket_item.delete()
+            new_basket_item.quantity = 0
 
-        basket_items = Basket.objects.filter(user=request.user)
+        new_basket_item.save()
+
+        basket = []
+        basket = Basket.objects.filter(user=request.user)
+        basket.sum = 0
+        for item in basket:
+            item.sum = item.product.price * item.quantity
+            basket.sum += item.sum
 
         content = {
-            'basket_items': basket_items,
+            'basket': basket,
         }
 
         result = render_to_string('basketapp/includes/inc_basket_list.html', content)

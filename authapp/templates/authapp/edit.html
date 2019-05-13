@@ -3,10 +3,17 @@
 
 
 {% block content %}
+    <div class="user_avatar"><img src="
+            {% if user_profile.vk_photo %}
+                {{ user_profile.vk_photo }}
+            {% else %}/media/{{ user.avatar|default:'users_avatars/default.jpg' }}
+            {% endif %}" alt="Фото профиля" style="max-height: 100px;">
+    </div>
     <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
             {{ edit_form.as_table }}
+            {{ profile_form.as_table }}
         </table>
         <input class="form-control" type="submit" value="сохранить">
     </form>
@@ -15,5 +22,5 @@
             на главную
         </a>
     </button>
-    <div class="user_avatar"><img src="/media/{{ user.avatar }}"></div>
+
 {% endblock %}

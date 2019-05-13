@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Category
 from .models import Product
-from basketapp.models import Basket
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # Названия страниц для title и названия в меню
 name_main = 'Главная'
@@ -19,20 +21,44 @@ links_main_menu = (
 )
 
 
-def get_basket(request):
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
-        basket.sum = 0
-        for item in basket:
-            basket.sum += item.product_cost
-    return basket
+def get_strucured_categories(order='-is_active', is_active=0):
+    if is_active:
+        all_categories = Category.objects.filter(is_active=1).order_by(order)
+    else:
+        all_categories = Category.objects.all().order_by(order)
+
+    structure = []
+
+    def get_category_childs(_cat, _categories):
+        childs = []
+
+        for item in _categories:
+            if item.parent == _cat:
+                childs.append(item)
+
+        return childs
+
+    def get_parent_child_struct(cat):
+        if not cat.parent and cat not in structure:
+            structure.append(cat)
+
+        for i in get_category_childs(cat, all_categories):
+            if i not in structure:
+                structure.append(i)
+
+            get_parent_child_struct(i)
+
+    for cat in all_categories:
+        get_parent_child_struct(cat)
+
+    return structure
 
 
-def common_content(request):
-    content = {'links_main_menu': links_main_menu,
-               'basket': get_basket(request)
-               }
+def common_content(*args):
+    content = {
+        'links_main_menu': links_main_menu,
+        'categories_menu': get_strucured_categories(is_active=1)
+    }
     return content
 
 
@@ -50,103 +76,100 @@ def get_same_products(hot_product):
 
 def main(request):
     content = {
-        **common_content(request),
+        **common_content(),
         'title': name_main,
     }
     return render(request, 'mainapp/index.html', content)
 
 
-def categories(request):
-    hot_product = get_hot_product()
-    same_products = get_same_products(hot_product)
-    categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
-    content = {
-        **common_content(request),
-        'title': name_categories,
-        'menu_categories_list': categories_list,
-        'menu_subcategories_list': categories_list,
-        'hot_product': hot_product,
-        'same_products': same_products,
-        'type': 'categories',
-    }
-    return render(request, 'mainapp/categories.html', content)
+class CategoriesList(ListView):
+    model = Category
+    template_name = 'mainapp/categories.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        hot_product = get_hot_product()
+        same_products = get_same_products(hot_product)
+        categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
+
+        context['links_main_menu'] = links_main_menu
+        context['categories_menu'] = get_strucured_categories(is_active=1)
+        context['title'] = name_categories
+        context['menu_categories_list'] = categories_list
+        context['menu_subcategories_list'] = categories_list
+        context['hot_product'] = hot_product
+        context['same_products'] = same_products
+        context['type'] = 'categories'
+
+        return context
 
 
-# def subCategories(request, cat_id):
-#     hot_product = get_hot_product(category=cat_id)
-#     same_products = get_same_products(hot_product)
-#     categories_list = Category.objects.all()
-#     subcategories_list = Category.objects.filter(category=cat_id)
-#     content = {
-#         **common_content(request),
-#         'title': name_categories,
-#         'items_list': subcategories_list,
-#         'menu_categories_list': categories_list,
-#         'menu_subcategories_list': subcategories_list,
-#         'hot_product': hot_product,
-#         'same_products': same_products,
-#         'cat_id': int(cat_id),
-#         'type': 'subCategories',
-#     }
-#     return render(request, 'mainapp/categories.html', content)
+class ProductsList(ListView):
+    model = Product
+    template_name = 'mainapp/categories.html'
+    paginate_by = 1
+    allow_empty = True
+    context_object_name = 'items_list'
+
+    def get_queryset(self):
+        cat_id = self.kwargs['cat_id']
+        products_list = Product.objects.filter(category=cat_id, category__is_active=True, is_active=True)
+        if len(products_list) == 0:
+            if len(Category.objects.filter(parent=cat_id)) != 0:
+                child_category = Category.objects.filter(parent=cat_id)
+                for _category in child_category:
+                    products_list = Product.objects.filter(category=_category.pk)
+        return products_list
+
+    def get_context_data(self, **kwargs):
+        cat_id = self.kwargs['cat_id']
+        hot_product = get_hot_product()
+        same_products = get_same_products(hot_product)
+        categories_list = Category.objects.filter(nesting_level=0, is_active=True)
+        subcategories_list = Category.objects.filter(parent=cat_id, is_active=True)
+
+        context = {
+            **common_content(),
+            'title': name_categories,
+            'menu_categories_list': categories_list,
+            'menu_subcategories_list': subcategories_list,
+            'cat_id': int(cat_id),
+            'hot_product': hot_product,
+            'same_products': same_products,
+            'type': 'productsOfCategory',
+            **super().get_context_data(**kwargs),
+        }
+
+        return context
 
 
-def productsOfCategory(request, cat_id, page=1):
-    hot_product = get_hot_product(category=cat_id)
-    same_products = get_same_products(hot_product)
-    categories_list = Category.objects.filter(nesting_level=0, is_active=True)
-    subcategories_list = Category.objects.filter(parent=cat_id, is_active=True)
-    products_list = Product.objects.filter(category=cat_id, category__is_active=True, is_active=True)
+class ProductView(DetailView):
+    model = Product
+    template_name = 'mainapp/products.html'
+    context_object_name = 'product'
 
-    # Если в этой категории нет товаров, то смотрим в дочерней
-    if len(products_list) == 0:
-        if len(Category.objects.filter(parent=cat_id)) != 0:
-            child_category = Category.objects.filter(parent=cat_id)
-            for _category in child_category:
-                products_list = Product.objects.filter(category=_category.pk)
-    paginator = Paginator(products_list, 2)
-    try:
-        products_paginator = paginator.page(page)
-    except PageNotAnInteger:
-        products_paginator = paginator.page(1)
-    except EmptyPage:
-        products_paginator = paginator.page(paginator.num_pages)
-    content = {
-        **common_content(request),
-        'title': name_categories,
-        'items_list': products_paginator,
-        'menu_categories_list': categories_list,
-        'menu_subcategories_list': subcategories_list,
-        'cat_id': int(cat_id),
-        'hot_product': hot_product,
-        'same_products': same_products,
-        'type': 'productsOfCategory',
-    }
+    def get_context_data(self, **kwargs):
+        product_item = get_object_or_404(Product, pk=self.kwargs['pk'])
+        categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
+        subcategories_list = Category.objects.filter(parent=product_item.category).filter(is_active=True)
+        cat_id = product_item.category.id
 
-    return render(request, 'mainapp/categories.html', content)
+        context = {
+            **common_content(),
+            'title': name_products,
+            'menu_categories_list': categories_list,
+            'menu_subcategories_list': subcategories_list,
+            'cat_id': int(cat_id),
+            'type': 'products',
+            **super().get_context_data(**kwargs),
+        }
 
-
-def products(request, product_id):
-    product_item = Product.objects.get(pk=product_id)
-    categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
-    subcategories_list = Category.objects.filter(parent=product_item.category).filter(is_active=True)
-    cat_id = product_item.category.id
-    content = {
-        **common_content(request),
-        'title': name_products,
-        'product': product_item,
-        'menu_categories_list': categories_list,
-        'menu_subcategories_list': subcategories_list,
-        'cat_id': int(cat_id),
-        'type': 'products',
-    }
-
-    return render(request, 'mainapp/products.html', content)
+        return context
 
 
 def contacts(request):
     content = {
-        **common_content(request),
+        **common_content(),
         'title': name_contacts,
     }
     return render(request, 'mainapp/contacts.html', content)

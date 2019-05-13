@@ -8,4 +8,3 @@ register = template.Library()
 def products_count(category):
     quantity = len(Product.objects.filter(category=category.pk))
     return quantity
-

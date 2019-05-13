@@ -1,5 +1,8 @@
 {% load my_tags %}
-
-<a href="{% url 'basket:view' %}" class="basket" id="basketSum">
-    {{ request.user|basket_total_cost }}
-</a>
+    <a href="{% url 'basket:view' %}" class="basket" id="basketSum">
+        {{ request.user|basket_total_cost }}
+    </a>
+<div class="popup_menu_wrapper">
+    <a href="{% url 'basket:view' %}">Корзина</a><br>
+    <a href="{% url 'orders:index' %}">Заказы</a>
+</div>

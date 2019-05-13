@@ -16,8 +16,11 @@ class Category(models.Model):
     image = models.ImageField(verbose_name='Картинка категории', upload_to='products_images/preview', blank=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
 
-    def get_id(self):
-        return self.pk
+    def child_products(self):
+        return Product.objects.filter(category=self).count()
+
+    def get_childs(self):
+        return Category.objects.filter(parent=self)
 
     def __str__(self):
         return self.name

@@ -1,20 +1,16 @@
+{% load staticfiles %}
+{% load my_tags %}
+
+
 <div class="left_menu">
-    <ul>
-        {% for category in menu_categories_list %}
-            <li><a href="{% url 'products:category' category.id 1 %}"
-                   {% if category.pk == cat_id %}class="left_menu_active_link"{% endif %}>{{ category.name }}</a></li>
-            {% if menu_subcategories_list and category.pk == cat_id %}
-                <li>
-                    <ul>
-                        {% for subcategory in menu_subcategories_list %}
-                            <li><a href="{% url 'products:category' subcategory.id 1 %}"
-                                   {% if subcategory.pk == subcategory_id %}class="left_menu_active_link"{% endif %}>{{ subcategory.name }}
-                            </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+
+    {% for category in categories_menu %}
+        <p class="catalog_menu_item" style="margin-left:{{ category.nesting_level|mult:10 }}px"><a href="
+        {% url 'products:category' category.id 1 %}">{{ category.name }}</a>
+    {% endfor %}
+    {% if user.is_superuser %}
+        <a href="{% url 'myadmin:categories' %}" class="superuser_edit"><img src="{% static 'img/edit.png' %}" alt="редактировать"
+                                                    title="редактировать категории в админке"></a>
+    {% endif %}
+
 </div>

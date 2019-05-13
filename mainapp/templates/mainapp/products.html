@@ -11,6 +11,13 @@
     <div class="content_wrapper">
         {% include 'mainapp/includes/inc_catalog_left_menu.html' %}
         <main>
+
+            {% if user.is_superuser %}
+                <a href="{% url 'myadmin:product_update' product.pk %}" class="superuser_edit"><img src="{% static 'img/edit.png' %}"
+                                                                                   alt="редактировать"
+                                                                                   title="редактировать категории в админке"></a>
+            {% endif %}
+
             <h2 class="header_heading">{{ product.name }}</h2>
             <hr>
             <div class="product_wrapper">
@@ -23,41 +30,9 @@
                     <h3 class="product_description mt0">Описание товара</h3>
                     <p class="product_short_description">{{ product.short_desc }}</p>
                     <span class="product_price">{{ product.price }}</span>
-                    <a href="{% url 'basket:add' product.pk %}" id="addToBasketButton" data-product-id="{{ product.pk }}">Добавить в корзину</a>
+                    <a href="{% if user.is_authenticated %}#{% else %}{% url 'basket:add' product.pk %}{% endif %}"
+                       id="addToBasketButton" data-product-id="{{ product.pk }}">Добавить в корзину</a>
                 </div>
-                {#        <h3 class="product_description cb">Характеристики товара</h3>#}
-                {#        <ul class="product_specs">#}
-                {#            <li class="product_specs_item">Что это: рога</li>#}
-                {#            <li class="product_specs_item">Цвет: коричневый</li>#}
-                {#            <li class="product_specs_item">Размер(см): 50х30х20</li>#}
-                {#            <li class="product_specs_item">Страна происхождения: Россия</li>#}
-                {#            <li class="product_specs_item">Год изготовления: 1975</li>#}
-                {#            <li class="product_specs_item"><b>Цена: 65 000руб</b></li>#}
-                {#        </ul>#}
-                {#        <table class="product_specs_table">#}
-                {#            <tr>#}
-                {#                <td colspan="5">Сводная таблица характеристик</td>#}
-                {#            </tr>#}
-                {#            <tr>#}
-                {#                <td rowspan="3">размеры</td>#}
-                {#                <td>ширина</td>#}
-                {#                <td>50см</td>#}
-                {#                <td>вес</td>#}
-                {#                <td>3кг</td>#}
-                {#            </tr>#}
-                {#            <tr>#}
-                {#                <td>высота</td>#}
-                {#                <td>45см</td>#}
-                {#                <td>размер</td>#}
-                {#                <td>48</td>#}
-                {#            </tr>#}
-                {#            <tr>#}
-                {#                <td>длина</td>#}
-                {#                <td>35см</td>#}
-                {#                <td>плотность</td>#}
-                {#                <td>2700кг/м<sup>3</sup></td>#}
-                {#            </tr>#}
-                {#        </table>#}
 
                 <h3 class="product_description">Подробное описание товара</h3>
                 <p class="product_full_description">{{ product.description }}</p>

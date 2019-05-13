@@ -6,16 +6,20 @@
     <div class="user_delete">
         Уверены, что хотите удалить {{ product_to_delete.username }}
         {% if product_to_delete.name %}
-            ({{ product_to_delete.name|title }}
+            {{ product_to_delete.name|title }}
         {% endif %}
         ?
-        <form action="{% url 'admin:product_delete' product_to_delete.pk %}"
-              method="post">
+        <form action="{% url 'myadmin:product_delete' product_to_delete.pk %}" method="post">
             {% csrf_token %}
+            <label for="deleteCheckBox">
+                <input type="checkbox" id="deleteCheckBox" name="delete" value="1">
+                удалить из базы
+            </label>
+            <input type="hidden" name="category" value="{{ category_pk }}">
             <input class="btn btn-danger" type="submit" value="удалить">
         </form>
         <button class="btn btn-success">
-            <a href="{% url 'admin:products' category_pk %}">
+            <a href="{% url 'myadmin:products' category_pk %}">
                 Отмена
             </a>
         </button>

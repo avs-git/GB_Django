@@ -272,6 +272,7 @@ class OrderUpdateView(IsSuperUserView, UpdateView):
 class OrderDeleteView(IsSuperUserView, DeleteView):
     model = Order
     success_url = reverse_lazy('myadmin:orders')
+    template_name = 'adminapp/order_confirm_delete.html'
 
 
 def order_change_status(request, pk):

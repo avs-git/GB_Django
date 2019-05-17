@@ -16,7 +16,7 @@
                         <thead>
                         <tr>
                             {% for field in form.visible_fields %}
-                                <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                                <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
                                     {{ field.label|capfirst }}
                                 </th>
                             {% endfor %}
@@ -25,22 +25,26 @@
                     {% endif %}
                     <tr class="formset_row">
                         {% for field in form.visible_fields %}
-                            <td class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                            <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
                                 {% if forloop.first %}
                                     {% for hidden in form.hidden_fields %}
                                         {{ hidden }}
                                     {% endfor %}
                                 {% endif %}
                                 {{ field.errors.as_ul }}
-                                {{ field }}
+                                {% if field.name != 'price' %}
+                                    {{ field }}
+                                {% else %}
+                                        <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">{{ field.value|default:0 }}</span> руб
+                                {% endif %}
                             </td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
             </table>
 
-            <p><a href="#" id="addOrderItem" style="text-decoration: none; border-bottom: 1px dashed cyan;">Добавить
-                позицию</a></p>
+{#            <p><a href="#" id="addOrderItem" style="text-decoration: none; border-bottom: 1px dashed cyan;">Добавить#}
+{#                позицию</a></p>#}
 
             <button type="submit" value="сохранить" class="btn btn-default btn-round form-control last">сохранить
             </button>
@@ -48,7 +52,16 @@
         </form>
     </div>
 
+{#        {% block js %}#}
+{#            <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
+{#            <script src="{% static 'admin/js/jquery.init.js' %}"></script>#}
+{#            <script src="{% static 'admin/js/inlines.js' %}"></script>#}
+{#            <script src="{% static 'js/ordersapp_scipts.js' %}"></script>#}
+{#        {% endblock %}#}
+
     {% block js %}
+        <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'js/jquery.formset.js' %}"></script>
         <script src="{% static 'js/ordersapp_scipts.js' %}"></script>
     {% endblock %}
 

@@ -23,9 +23,9 @@ links_main_menu = (
 
 def get_strucured_categories(order='-is_active', is_active=0):
     if is_active:
-        all_categories = Category.objects.filter(is_active=1).order_by(order)
+        all_categories = Category.objects.all().filter(is_active=1)
     else:
-        all_categories = Category.objects.all().order_by(order)
+        all_categories = Category.objects.all().order(order=order)
 
     structure = []
 
@@ -63,13 +63,13 @@ def common_content(*args):
 
 
 def get_hot_product():
-    _products = Product.objects.all()
+    _products = Product.objects.all().select_related()
 
     return random.sample(list(_products), 1)[0]
 
 
 def get_same_products(hot_product):
-    same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
+    same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk).select_related()[:3]
 
     return same_products
 
@@ -107,7 +107,7 @@ class CategoriesList(ListView):
 class ProductsList(ListView):
     model = Product
     template_name = 'mainapp/categories.html'
-    paginate_by = 1
+    paginate_by = 10
     allow_empty = True
     context_object_name = 'items_list'
 
@@ -116,9 +116,9 @@ class ProductsList(ListView):
         products_list = Product.objects.filter(category=cat_id, category__is_active=True, is_active=True)
         if len(products_list) == 0:
             if len(Category.objects.filter(parent=cat_id)) != 0:
-                child_category = Category.objects.filter(parent=cat_id)
+                child_category = Category.objects.filter(parent=cat_id).select_related()
                 for _category in child_category:
-                    products_list = Product.objects.filter(category=_category.pk)
+                    products_list = Product.objects.filter(category=_category.pk).select_related()
         return products_list
 
     def get_context_data(self, **kwargs):
@@ -149,9 +149,9 @@ class ProductView(DetailView):
     context_object_name = 'product'
 
     def get_context_data(self, **kwargs):
-        product_item = get_object_or_404(Product, pk=self.kwargs['pk'])
-        categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True)
-        subcategories_list = Category.objects.filter(parent=product_item.category).filter(is_active=True)
+        product_item = Product.objects.filter(pk=self.kwargs['pk']).select_related().first()
+        categories_list = Category.objects.filter(nesting_level=0).filter(is_active=True).select_related()
+        subcategories_list = Category.objects.filter(parent=product_item.category).filter(is_active=True).select_related()
         cat_id = product_item.category.id
 
         context = {

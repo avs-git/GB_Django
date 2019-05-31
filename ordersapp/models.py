@@ -28,7 +28,7 @@ class Order(models.Model):
                               max_length=3,
                               choices=ORDER_STATUS_CHOICES,
                               default=FORMING)
-    is_active = models.BooleanField(verbose_name='активен', default=True)
+    is_active = models.BooleanField(verbose_name='активен', default=True, db_index=True)
 
     class Meta:
         ordering = ('-created',)
@@ -39,15 +39,15 @@ class Order(models.Model):
         return 'Текущий заказ: {}'.format(self.id)
 
     def get_total_quantity(self):
-        items = self.orderitems.select_related()
+        items = self.orderitems.prefetch_related()
         return sum(list(map(lambda x: x.quantity, items)))
 
     def get_product_type_quantity(self):
-        items = self.orderitems.select_related()
+        items = self.orderitems.prefetch_related()
         return len(items)
 
     def get_total_cost(self):
-        items = self.orderitems.select_related()
+        items = self.orderitems.select_related('product')
         return sum(list(map(lambda x: x.quantity * x.product.price, items)))
 
     # переопределяем метод, удаляющий объект
@@ -58,6 +58,13 @@ class Order(models.Model):
 
         self.is_active = False
         self.save()
+
+    def get_summary(self):
+        items = self.orderitems.select_related()
+        return {
+            'total_cost': sum(list(map(lambda x: x.quantity * x.product.price, items))),
+            'total_quantity': sum(list(map(lambda x: x.quantity, items)))
+        }
 
 
 class OrderItem(models.Model):

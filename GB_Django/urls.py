@@ -18,23 +18,30 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import include
+from django.views.generic import RedirectView
+from django.urls import re_path
+
 import mainapp.views as mainapp
 
 urlpatterns = [
-    url(r'^$', mainapp.main, name='index'),
-    url(r'^catalog/', include('mainapp.urls', namespace='products')),
-    url(r'^contacts/', mainapp.contacts, name='contacts'),
+    re_path(r'^$', mainapp.main, name='index'),
+    re_path(r'^catalog/', include('mainapp.urls', namespace='products')),
+    re_path(r'^contacts/$', mainapp.contacts, name='contacts'),
     url('auth/', include('authapp.urls', namespace='auth')),
     # url(r'^auth/verify/', include("social_django.urls", namespace="social")),
     url('basket/', include('basketapp.urls', namespace='basket')),
     url('admin/', include('adminapp.urls', namespace='myadmin')),
-    url('^social/', include('social_django.urls', namespace='social')),
-    url('^orders/', include('ordersapp.urls', namespace='orders')),
+    url('social/', include('social_django.urls', namespace='social')),
+    url('orders/', include('ordersapp.urls', namespace='orders')),
     url('admin_old/', admin.site.urls),
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
 ]
 
 if settings.DEBUG:
+    # import debug_toolbar
+
+    # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # urlpatterns.append(url('__debug__/', include(debug_toolbar.urls)))
     import debug_toolbar
 
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns.append(url('__debug__/', include(debug_toolbar.urls)))
+    urlpatterns += [url(r'^__debug__/', include(debug_toolbar.urls))]

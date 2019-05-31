@@ -3,6 +3,9 @@ from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.db import transaction
+from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from django.forms import inlineformset_factory
 
@@ -13,6 +16,7 @@ from basketapp.models import Basket
 from ordersapp.models import Order, OrderItem
 from ordersapp.forms import OrderItemForm
 from mainapp.views import links_main_menu
+from mainapp.models import Product
 
 
 class OrderList(ListView):
@@ -26,6 +30,10 @@ class OrderList(ListView):
         context['links_main_menu'] = links_main_menu
 
         return context
+
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 class OrderItemsCreate(CreateView):
@@ -75,6 +83,10 @@ class OrderItemsCreate(CreateView):
 
         return super().form_valid(form)
 
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 def order_forming_complete(request, pk):
     order = get_object_or_404(Order, pk=pk)
@@ -93,6 +105,10 @@ class OrderRead(DetailView):
         context['links_main_menu'] = links_main_menu
         return context
 
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 class OrderItemsUpdate(UpdateView):
     model = Order
@@ -108,7 +124,8 @@ class OrderItemsUpdate(UpdateView):
         if self.request.POST:
             data['orderitems'] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            formset = OrderFormSet(instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
             for form in formset.forms:
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price
@@ -134,10 +151,18 @@ class OrderItemsUpdate(UpdateView):
 
         return super().form_valid(form)
 
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 class OrderDelete(DeleteView):
     model = Order
     success_url = reverse_lazy('ordersapp:index')
+
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 @receiver(pre_save, sender=OrderItem)
@@ -156,3 +181,12 @@ def product_quantity_update_save(sender, update_fields, instance, **kwargs):
 def product_quantity_update_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
     instance.product.save()
+
+
+def get_product_price(request, pk):
+    if request.is_ajax():
+        product = Product.objects.filter(pk=int(pk)).first()
+        if product:
+            return JsonResponse({'price': product.price})
+        else:
+            return JsonResponse({'price': 0})

@@ -12,7 +12,7 @@ from mainapp.views import common_content
 @login_required
 def basket(request):
     basket = []
-    basket = Basket.objects.filter(user=request.user)
+    basket = Basket.objects.filter(user=request.user).select_related()
     basket.sum = 0
     for item in basket:
         if item.quantity == 0:
